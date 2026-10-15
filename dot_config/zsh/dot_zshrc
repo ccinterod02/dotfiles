@@ -1,0 +1,111 @@
+umask 022
+
+command -v fastfetch &> /dev/null && fastfetch
+
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/antidote"
+[[ -d $ZSH_CACHE_DIR/completions ]] || mkdir -p $ZSH_CACHE_DIR/completions
+typeset -ga _compdef_queue
+compdef() { _compdef_queue+=("${(j: :)${(@q)@}}") }
+if [[ -r /usr/share/zsh-antidote/antidote.zsh ]]; then
+    source /usr/share/zsh-antidote/antidote.zsh
+    antidote load
+fi
+AUTO_NOTIFY_IGNORE+=(tmux claude btop vi vim code fzf bat lt)
+
+fpath+=("${ZDOTDIR:-$HOME}/completions")
+[[ -d ${XDG_CACHE_HOME:-$HOME/.cache}/zsh ]] || mkdir -p ${XDG_CACHE_HOME:-$HOME/.cache}/zsh
+autoload -Uz compinit && compinit -d "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-$ZSH_VERSION"
+for _c in $_compdef_queue; do eval "compdef $_c"; done; unset _c _compdef_queue
+zstyle ':completion:*' menu select
+
+if (( $+functions[antidote] )); then
+    _fzf_tab="$(antidote path Aloxaf/fzf-tab 2>/dev/null)"
+    [[ -r $_fzf_tab/fzf-tab.plugin.zsh ]] && source $_fzf_tab/fzf-tab.plugin.zsh
+    unset _fzf_tab
+fi
+
+command -v fzf &> /dev/null && source <(fzf --zsh)
+
+command -v zoxide &> /dev/null && eval "$(zoxide init zsh)"
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+if command -v batcat &> /dev/null; then
+    alias cat='batcat --style=auto'
+    alias bat='batcat'
+elif command -v bat &> /dev/null; then
+    alias cat='bat --style=auto'
+fi
+
+if command -v eza &> /dev/null; then
+    _eza='eza --color=auto --icons=auto --group-directories-first'
+    alias ls="$_eza"
+    alias la="$_eza -a"
+    alias ll="$_eza -al"
+    alias lt="$_eza -aT"
+    alias tree="$_eza -T"
+    unset _eza
+else
+    alias ll='ls -alF'
+    alias la='ls -A'
+fi
+
+if command -v fdfind &> /dev/null; then
+    alias fd='fdfind'
+fi
+
+alias dps='docker ps'
+alias dpsa='docker ps -a'
+alias di='docker images'
+alias dcu='docker-compose up -d'
+alias dcd='docker-compose down'
+alias dcl='docker-compose logs -f'
+alias dex='docker exec -it'
+
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git log --oneline --graph --decorate'
+alias gd='git diff'
+
+export EDITOR='nvim'
+export VISUAL='nvim'
+export BAT_THEME='ansi'
+export MANROFFOPT='-c'
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+[[ ! -f ${ZDOTDIR:-$HOME}/.p10k.zsh ]] || source ${ZDOTDIR:-$HOME}/.p10k.zsh
+
+export PNPM_HOME="$HOME/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+export PATH="$HOME/.local/bin:$PATH"
+
+if command -v direnv &> /dev/null; then
+    eval "$(direnv hook zsh)"
+fi
+
+export PATH="$PATH:$HOME/.lmstudio/bin"
+
+export PATH="$HOME/.opencode/bin:$PATH"
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+export ANDROID_HOME="$HOME/Android/Sdk"
+export ANDROID_SDK_ROOT="$ANDROID_HOME"
+export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$HOME/fvm/bin:$PATH"
+export PATH="$HOME/.pub-cache/bin:$PATH"
+export PATH="$HOME/.platformio/penv/bin:$PATH"
+
+typeset -U path fpath

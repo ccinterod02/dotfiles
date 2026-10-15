@@ -1,0 +1,7 @@
+#compdef smpmgr
+
+_smpmgr_completion() {
+  eval $(env _TYPER_COMPLETE_ARGS="${words[1,$CURRENT]}" _SMPMGR_COMPLETE=complete_zsh smpmgr)
+}
+
+compdef _smpmgr_completion smpmgr
