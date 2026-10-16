@@ -1,0 +1,7 @@
+% systemd, logs
+
+# Ver los logs de un servicio en vivo
+journalctl -u <servicio> -f -n <lineas>
+
+$ servicio: systemctl list-units --type=service --no-legend --plain | awk '{print $1}'
+$ lineas: printf '50\n200\n1000\n'

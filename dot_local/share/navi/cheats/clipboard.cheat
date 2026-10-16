@@ -1,0 +1,23 @@
+% clipboard, xclip
+
+# Copiar el contenido de un archivo
+xclip -selection clipboard < <archivo>
+
+# Copiar la salida de un comando
+<comando> | xclip -selection clipboard
+
+# Copiar la ruta del directorio actual
+pwd | tr -d '\n' | xclip -selection clipboard
+
+# Copiar una clave pública SSH
+xclip -selection clipboard < <clave_pub>
+
+# Copiar una imagen PNG
+xclip -selection clipboard -t image/png -i <imagen>
+
+# Pegar el portapapeles en un archivo
+xclip -selection clipboard -o > <destino>
+
+$ archivo: fd -t f -d 3
+$ imagen: fd -t f -e png -d 3
+$ clave_pub: printf '%s\n' ~/.ssh/*.pub

@@ -1,0 +1,17 @@
+% ssh, claves
+
+# Copiar la clave pública a un host del ssh config
+ssh-copy-id -i <clave_pub> <host>
+
+# Copiar la clave pública a un servidor por IP
+ssh-copy-id -i <clave_pub> -p <puerto> <usuario>@<ip>
+
+# Comprobar que un host entra con clave y sin contraseña
+ssh -o BatchMode=yes -o PasswordAuthentication=no <host> true && echo OK
+
+# Generar una clave ed25519 nueva
+ssh-keygen -t ed25519 -C "<etiqueta>" -f ~/.ssh/<nombre>
+
+$ clave_pub: printf '%s\n' ~/.ssh/*.pub
+$ host: awk 'tolower($1)=="host"{for(i=2;i<=NF;i++) if($i !~ /[*?]/) print $i}' ~/.ssh/config
+$ puerto: printf '22\n'
