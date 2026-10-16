@@ -1,4 +1,5 @@
 umask 022
+export PATH="$HOME/.local/bin:$PATH"
 
 command -v fastfetch &> /dev/null && fastfetch
 
@@ -10,8 +11,8 @@ export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/antidote"
 [[ -d $ZSH_CACHE_DIR/completions ]] || mkdir -p $ZSH_CACHE_DIR/completions
 typeset -ga _compdef_queue
 compdef() { _compdef_queue+=("${(j: :)${(@q)@}}") }
-if [[ -r /usr/share/zsh-antidote/antidote.zsh ]]; then
-    source /usr/share/zsh-antidote/antidote.zsh
+if [[ -r $HOME/.local/share/antidote/antidote.zsh ]]; then
+    source $HOME/.local/share/antidote/antidote.zsh
     antidote load
 fi
 AUTO_NOTIFY_IGNORE+=(tmux claude btop vi vim code fzf bat lt)
@@ -95,7 +96,6 @@ esac
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-export PATH="$HOME/.local/bin:$PATH"
 
 if command -v direnv &> /dev/null; then
     eval "$(direnv hook zsh)"

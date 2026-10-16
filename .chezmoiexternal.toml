@@ -1,4 +1,26 @@
+{{- $antidoteVersion := "2.3.0" -}}
+{{- $naviVersion := "2.24.0" -}}
+{{- $fzfVersion := "0.74.5" -}}
 [".config/tmux/plugins/tpm"]
     type = "git-repo"
     url = "https://github.com/tmux-plugins/tpm"
     refreshPeriod = "168h"
+
+[".local/share/antidote"]
+    type = "archive"
+    url = "https://github.com/mattmc3/antidote/archive/refs/tags/v{{ $antidoteVersion }}.tar.gz"
+    exact = true
+    stripComponents = 1
+{{- if not (has .chezmoi.osRelease.id (list "arch" "cachyos")) }}
+{{- $naviTarget := dict "amd64" "x86_64-unknown-linux-musl" "arm64" "aarch64-unknown-linux-gnu" }}
+
+[".local/bin/navi"]
+    type = "archive-file"
+    url = "https://github.com/denisidoro/navi/releases/download/v{{ $naviVersion }}/navi-v{{ $naviVersion }}-{{ get $naviTarget .chezmoi.arch }}.tar.gz"
+    path = "./navi"
+
+[".local/bin/fzf"]
+    type = "archive-file"
+    url = "https://github.com/junegunn/fzf/releases/download/v{{ $fzfVersion }}/fzf-{{ $fzfVersion }}-linux_{{ .chezmoi.arch }}.tar.gz"
+    path = "fzf"
+{{- end }}
