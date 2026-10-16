@@ -74,6 +74,7 @@ alias gc='git commit'
 alias gp='git push'
 alias gl='git log --oneline --graph --decorate'
 alias gd='git diff'
+unalias gga 2>/dev/null
 
 export EDITOR='nvim'
 export VISUAL='nvim'
@@ -107,5 +108,7 @@ export ANDROID_SDK_ROOT="$ANDROID_HOME"
 export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$HOME/fvm/bin:$PATH"
 export PATH="$HOME/.pub-cache/bin:$PATH"
 export PATH="$HOME/.platformio/penv/bin:$PATH"
+
+[[ ! -r ${ZDOTDIR:-$HOME}/local.zsh ]] || source ${ZDOTDIR:-$HOME}/local.zsh
 
 typeset -U path fpath
