@@ -1,6 +1,7 @@
 {{- $antidoteVersion := "2.3.0" -}}
 {{- $naviVersion := "2.24.0" -}}
 {{- $fzfVersion := "0.74.5" -}}
+{{- $workmuxVersion := "0.1.284" -}}
 [".config/tmux/plugins/tpm"]
     type = "git-repo"
     url = "https://github.com/tmux-plugins/tpm"
@@ -11,6 +12,11 @@
     url = "https://github.com/mattmc3/antidote/archive/refs/tags/v{{ $antidoteVersion }}.tar.gz"
     exact = true
     stripComponents = 1
+
+[".local/bin/workmux"]
+    type = "archive-file"
+    url = "https://github.com/raine/workmux/releases/download/v{{ $workmuxVersion }}/workmux-linux-{{ .chezmoi.arch }}.tar.gz"
+    path = "workmux"
 {{- if not (has .chezmoi.osRelease.id (list "arch" "cachyos")) }}
 {{- $naviTarget := dict "amd64" "x86_64-unknown-linux-musl" "arm64" "aarch64-unknown-linux-gnu" }}
 
