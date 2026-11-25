@@ -1,5 +1,4 @@
 umask 022
-export PATH="$HOME/.local/bin:$PATH"
 
 command -v fastfetch &> /dev/null && fastfetch
 

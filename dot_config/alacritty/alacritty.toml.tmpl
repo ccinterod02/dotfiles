@@ -8,8 +8,8 @@ chars = "\u001B\r"
 {{- else -}}
 [terminal.shell]
 {{- end }}
-program = "tmux"
-args = ["new-session", "-A", "-s", "main"]
+program = "zsh"
+args = ["-c", "exec tmux new-session -A -s main"]
 
 [font]
 size = 10.0
